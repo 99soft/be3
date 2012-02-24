@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>com.collective.rdfizer</groupId>
+    <artifactId>parent</artifactId>
+    <packaging>pom</packaging>
+    <version>1.0-SNAPSHOT</version>
+    <name>Collective RDFizer Parent</name>
+
+	<modules>
+        <module>annotations</module>
+        <module>core</module>
+    </modules>
+
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    </properties>
+
+    <licenses>
+        <license>
+            <name>The MIT License</name>
+            <url>http://www.opensource.org/licenses/mit-license.php</url>
+        </license>
+    </licenses>
+
+    <inceptionYear>2011</inceptionYear>
+
+    <repositories>
+        <repository>
+            <id>sunsite-repo</id>
+            <url>http://mirrors.sunsite.dk/maven2/</url>
+        </repository>
+        <repository>
+            <id>jasigorg-repo</id>
+            <url>http://developer.jasig.org/repo/content/groups/m2-legacy/</url>
+        </repository>
+        <repository>
+            <id>jboss-public-repository-group</id>
+            <url>https://repository.jboss.org/nexus/content/groups/public-jboss/</url>
+        </repository>
+        <repository>
+            <id>java-net</id>
+            <url>http://download.java.net/maven/2/</url>
+        </repository>
+        <repository>
+            <id>apache-snapshots</id>
+            <url>http://repository.apache.org/snapshots/</url>
+        </repository>
+        <repository>
+            <id>aduna-software-release-repo</id>
+            <name>Aduna SW Release Repository</name>
+            <url>http://repo.aduna-software.org/maven2/releases</url>
+            <layout>default</layout>
+        </repository>
+    </repositories>
+
+    <developers>
+        <developer>
+            <id>dpalmisano</id>
+            <name>Davide Palmisano</name>
+            <email>dpalmisano at gmail dot com</email>
+            <organization>unnamed</organization>
+            <organizationUrl>http://dpalmisano.com/</organizationUrl>
+            <roles>
+                <role>Developer</role>
+            </roles>
+        </developer>
+    </developers>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>2.3.2</version>
+                <configuration>
+                    <source>1.6</source>
+                    <target>1.6</target>
+                </configuration>
+            </plugin>
+            <plugin>
+                <artifactId>maven-clean-plugin</artifactId>
+                <version>2.4.1</version>
+                <executions>
+                    <execution>
+                        <id>auto-clean</id>
+                        <phase>initialize</phase>
+                        <goals>
+                            <goal>clean</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <filesets>
+                        <fileset>
+                            <directory>${basedir}/</directory>
+                            <includes>
+                                <include>**/logs/*.log</include>
+                            </includes>
+                        </fileset>
+                    </filesets>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>2.4.3</version>
+                <configuration>
+                    <includes>
+                        <include>**/*TestCase.java</include>
+                        <include>**/*Test.java</include>
+                    </includes>
+                    <enableAssertions>false</enableAssertions>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+
+</project>

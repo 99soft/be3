@@ -1,0 +1,5 @@
+- should be able to serialize enums
+- vocabularies used for ids should be customizable, not tied to classes
+- add RDFNamespace annotation to declare the mainspace
+- add support for multiple RDF serializations (JSON, NQUADS, TURTLE)
+- short note: follow some ideas from tinkerpop frames framework https://github.com/tinkerpop/frames/wiki

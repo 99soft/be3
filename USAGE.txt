@@ -1,0 +1,29 @@
+*** HOW IT WORKS ***
+
+ - Ensure your Java Beans adhere to the following simple rules:
+
+    - if you have Collections (List, Vector etc) as fields in your bean
+      ensure they have delegate add method. For example:
+      
+	  @RDFClassType("http://mydomain.org/vocab/Person")
+      public class Person {
+          private List<Person> knows;
+      
+          @RDFPropery(properties = "http://xmlns.org/foaf/01/knows")
+          public List<Person> getKnows() {
+              return knows;
+          }
+    
+          public boolean addKnow(Person person) {
+              return knows.add(person);
+          }
+
+    }
+    
+    Please notice that the delegate method MUST be singular 
+    if the setter and getter are plural (without the ending 's').
+
+   - Java primitive types are serialized according the specified ValueTypeHandler 
+     implementations, classes marked with the @RDFClassType will be recursevely 
+     serialized while a method will be called on unmarked 
+     objects and serialized as untyped Literals.
