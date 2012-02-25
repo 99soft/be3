@@ -87,21 +87,21 @@ public final class DefaultTypedBe3Impl extends TypedBe3 {
             throws RDFizerException {
         if(clazz.equals(java.net.URI.class)) {
             try {
-                return new java.net.URI(identifier.toString());
+                return (T) new java.net.URI(identifier.toString());
             } catch (URISyntaxException e) {
                 throw new RDFizerException("Error: provided identifier '%s' is not a well-formed URI", identifier);
             }
         }
         if(clazz.equals(java.net.URL.class)) {
             try {
-                return new java.net.URL(identifier.toString());
+                return (T) new java.net.URL(identifier.toString());
             } catch (MalformedURLException e) {
                 throw new RDFizerException("Error: provided identifier '%s' is not a well-formed URL", identifier);
             }
         }
         if(statements.size() == 0) {
             try {
-                return new java.net.URI(identifier.toString());
+                return (T) new java.net.URI(identifier.toString());
             } catch (URISyntaxException e) {
                 throw new RDFizerException("Error: provided identifier '%s' is not a well-formed URI", identifier);
             }
