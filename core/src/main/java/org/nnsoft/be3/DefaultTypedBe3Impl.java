@@ -88,24 +88,21 @@ public final class DefaultTypedBe3Impl extends TypedBe3 {
             try {
                 return new java.net.URI(identifier.toString());
             } catch (URISyntaxException e) {
-                throw new RDFizerException("Error: provided identifier '"
-                        + identifier + "' is not a ell-formed URI", e);
+                throw new RDFizerException("Error: provided identifier '%s' is not a well-formed URI", identifier);
             }
         }
         if(clazz.equals(java.net.URL.class)) {
             try {
                 return new java.net.URL(identifier.toString());
             } catch (MalformedURLException e) {
-                throw new RDFizerException("Error: provided identifier '"
-                        + identifier + "' is not a ell-formed URL", e);
+                throw new RDFizerException("Error: provided identifier '%s' is not a well-formed URL", identifier);
             }
         }
         if(statements.size() == 0) {
             try {
                 return new java.net.URI(identifier.toString());
             } catch (URISyntaxException e) {
-                throw new RDFizerException("Error: provided identifier '"
-                        + identifier + "' is not a ell-formed URI", e);
+                throw new RDFizerException("Error: provided identifier '%s' is not a well-formed URI", identifier);
             }
         }
         List<Statement> firstLevelStatements = getLevelOneStatements(identifier, statements);
@@ -299,11 +296,11 @@ public final class DefaultTypedBe3Impl extends TypedBe3 {
             throws RDFizerException {
         URI objectRDFType = getRDFType(object.getClass());
         if (objectRDFType == null) {
-            throw new RDFizerException("Object: '" + object + "' has no RDFClassType annotation declared");
+            throw new RDFizerException("Object: '%s' has no RDFClassType annotation declared", object);
         }
         URI objectIdentifier = getObjectIdentifier(object);
         if (objectIdentifier == null) {
-            throw new RDFizerException("Object: '" + object + "' has no RDFIdentifier annotation declared");
+            throw new RDFizerException("Object: '%s' has no RDFIdentifier annotation declared", object);
         }
         if (added.contains(objectIdentifier)) {
             Statement[] statementsArray = added.toArray(new Statement[added.size()]);

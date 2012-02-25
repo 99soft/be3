@@ -21,6 +21,8 @@
  */
 package org.nnsoft.be3;
 
+import static java.lang.String.format;
+
 /**
  * Raised if something goes wrong within {@link com.collective.rdfizer.RDFizer}.
  *
@@ -33,8 +35,8 @@ public class RDFizerException extends Exception {
      */
     private static final long serialVersionUID = 1L;
 
-    public RDFizerException(String message) {
-        super(message);
+    public RDFizerException(String messagePattern, Object... arguments) {
+        this( format( messagePattern, arguments ), (Exception) null );
     }
 
     public RDFizerException(String message, Exception e) {
