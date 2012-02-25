@@ -21,6 +21,8 @@
  */
 package org.nnsoft.be3;
 
+import static org.testng.Assert.*;
+
 import com.collective.model.ProjectInvolvement;
 import com.collective.model.persistence.SourceRss;
 import com.collective.model.persistence.WebResource;
@@ -136,7 +138,7 @@ public class TypedRDFizerTestCase {
         List<Statement> statements = b3.getRDFStatements(getPerson());
         Assert.assertNotNull(statements);
         System.out.println(statements.size());
-        Assert.assertTrue(statements.size() == 20);
+        assertTrue(statements.size() == 20);
         for (Statement statement : statements) {
             System.out.println(statement);
         }
@@ -153,14 +155,14 @@ public class TypedRDFizerTestCase {
                 new URIImpl(getIdentifierURI(Person.class).toString() + "/" + person.getId()),
                 Person.class
         );
-        Assert.assertNotNull(retrievedPerson);
-        Assert.assertEquals(person, retrievedPerson);
-        Assert.assertEquals(person.getName(), retrievedPerson.getName());
-        Assert.assertEquals(person.getSurname(), retrievedPerson.getSurname());
-        Assert.assertEquals(person.getBirthDate().toString(), retrievedPerson.getBirthDate().toString());
-        Assert.assertEqualsNoOrder(person.getConcepts().toArray(), retrievedPerson.getConcepts().toArray());
-        Assert.assertEqualsNoOrder(person.getKnows().toArray(), retrievedPerson.getKnows().toArray());
-        Assert.assertEqualsNoOrder(person.getTags().toArray(), retrievedPerson.getTags().toArray());
+        assertNotNull(retrievedPerson);
+        assertEquals(person, retrievedPerson);
+        assertEquals(person.getName(), retrievedPerson.getName());
+        assertEquals(person.getSurname(), retrievedPerson.getSurname());
+        assertEquals(person.getBirthDate().toString(), retrievedPerson.getBirthDate().toString());
+        assertEqualsNoOrder(person.getConcepts().toArray(), retrievedPerson.getConcepts().toArray());
+        assertEqualsNoOrder(person.getKnows().toArray(), retrievedPerson.getKnows().toArray());
+        assertEqualsNoOrder(person.getTags().toArray(), retrievedPerson.getTags().toArray());
 
     }
 
@@ -178,10 +180,10 @@ public class TypedRDFizerTestCase {
                 new URIImpl(getIdentifierURI(UserProfile.class).toString() + "/" + profile.getId()),
                 UserProfile.class
         );
-        Assert.assertNotNull(retrievedProfile);
-        Assert.assertEquals(profile, retrievedProfile);
-        Assert.assertEqualsNoOrder(profile.getInterests().toArray(), retrievedProfile.getInterests().toArray());
-        Assert.assertEqualsNoOrder(profile.getSkills().toArray(), retrievedProfile.getSkills().toArray());
+        assertNotNull(retrievedProfile);
+        assertEquals(profile, retrievedProfile);
+        assertEqualsNoOrder(profile.getInterests().toArray(), retrievedProfile.getInterests().toArray());
+        assertEqualsNoOrder(profile.getSkills().toArray(), retrievedProfile.getSkills().toArray());
     }
 
     @Test
@@ -203,12 +205,12 @@ public class TypedRDFizerTestCase {
                 new URIImpl(getIdentifierURI(WebResourceEnhanced.class).toString() + "/" + resource.getId()),
                 WebResourceEnhanced.class
         );
-        Assert.assertNotNull(retrievedResource);
-        Assert.assertEquals(resource, retrievedResource);
-        Assert.assertEqualsNoOrder(resource.getTopics().toArray(), retrievedResource.getTopics().toArray());
-        Assert.assertEquals(resource.getDescrizione(), retrievedResource.getDescrizione());
-        Assert.assertEquals(resource.getTitolo(), retrievedResource.getTitolo());
-        Assert.assertEquals(resource.getUrl(), retrievedResource.getUrl());
+        assertNotNull(retrievedResource);
+        assertEquals(resource, retrievedResource);
+        assertEqualsNoOrder(resource.getTopics().toArray(), retrievedResource.getTopics().toArray());
+        assertEquals(resource.getDescrizione(), retrievedResource.getDescrizione());
+        assertEquals(resource.getTitolo(), retrievedResource.getTitolo());
+        assertEquals(resource.getUrl(), retrievedResource.getUrl());
     }
 
     @Test
@@ -218,14 +220,14 @@ public class TypedRDFizerTestCase {
         projectProfile.addManifestoConcept(new java.net.URI("http://dbpedia.org/resource/Example"));
         projectProfile.addManifestoConcept(new java.net.URI("http://dbpedia.org/resource/Fake"));
         List<Statement> statements = b3.getRDFStatements(projectProfile);
-        Assert.assertTrue(statements.size() == 3);
+        assertTrue(statements.size() == 3);
         ProjectProfile retrievedProjectProfile = (ProjectProfile) b3.getObject(
                 statements,
                 new URIImpl(getIdentifierURI(ProjectProfile.class).toString() + "/" + projectProfile.getId()),
                 ProjectProfile.class
         );
-        Assert.assertNotNull(retrievedProjectProfile);
-        Assert.assertEqualsNoOrder(
+        assertNotNull(retrievedProjectProfile);
+        assertEqualsNoOrder(
                 projectProfile.getManifestoConcepts().toArray(),
                 retrievedProjectProfile.getManifestoConcepts().toArray()
         );
@@ -256,7 +258,7 @@ public class TypedRDFizerTestCase {
         );
         List<Statement> statements = reposititoryResult.asList();
         UserProfile expected = (UserProfile) b3.getObject(statements, identifier, UserProfile.class);
-        Assert.assertNotNull(expected);
+        assertNotNull(expected);
     }
 
     @Test
@@ -311,10 +313,10 @@ public class TypedRDFizerTestCase {
                 Book.class
         );
 
-        Assert.assertEquals(statements.size(), 8);
-        Assert.assertTrue(retrievedBook.getId().equals(book.getId()));
-        Assert.assertTrue(retrievedBook.getTitle().equals(book.getTitle()));
-        Assert.assertEqualsNoOrder(retrievedBook.getPages().toArray(), book.getPages().toArray());
+        assertEquals(statements.size(), 8);
+        assertTrue(retrievedBook.getId().equals(book.getId()));
+        assertTrue(retrievedBook.getTitle().equals(book.getTitle()));
+        assertEqualsNoOrder(retrievedBook.getPages().toArray(), book.getPages().toArray());
     }
 
     @Test
@@ -329,7 +331,7 @@ public class TypedRDFizerTestCase {
 //            logger.debug("simpleBook statement: " + st);
 //        }
 
-        Assert.assertEquals(statements.size(), 7);
+        assertEquals(statements.size(), 7);
         //TODO: test more things?
     }
 
@@ -338,17 +340,17 @@ public class TypedRDFizerTestCase {
         EnhancedResource enhancedResource = getEnhancedResource();
         List<Statement> statements = b3.getRDFStatements(enhancedResource);
 
-        Assert.assertTrue(statements.size() == 4);
+        assertTrue(statements.size() == 4);
 
         EnhancedResource retrievedEnhancedResource = (EnhancedResource) b3.getObject(
                 statements,
                 new URIImpl(getIdentifierURI(EnhancedResource.class).toString() + "/" + enhancedResource.getId()),
                 EnhancedResource.class
         );
-        Assert.assertNotNull(retrievedEnhancedResource);
-        Assert.assertTrue(enhancedResource.getId().compareTo(retrievedEnhancedResource.getId()) == 0);
-        Assert.assertTrue(enhancedResource.getTitle().equals(retrievedEnhancedResource.getTitle()));
-        Assert.assertEqualsNoOrder(
+        assertNotNull(retrievedEnhancedResource);
+        assertTrue(enhancedResource.getId().compareTo(retrievedEnhancedResource.getId()) == 0);
+        assertTrue(enhancedResource.getTitle().equals(retrievedEnhancedResource.getTitle()));
+        assertEqualsNoOrder(
                 enhancedResource.getTopics().toArray(),
                 retrievedEnhancedResource.getTopics().toArray()
         );
@@ -366,17 +368,17 @@ public class TypedRDFizerTestCase {
             logger.debug("statement: " + st);
         }
 
-        Assert.assertTrue(statements.size() == 9);
+        assertTrue(statements.size() == 9);
 
         WebResourceEnhanced retrievedWebResourceEnhanced = (WebResourceEnhanced) b3.getObject(
                 statements,
                 new URIImpl(getIdentifierURI(WebResourceEnhanced.class).toString() + "/" + webResourceEnhanced.getId()),
                 WebResourceEnhanced.class
         );
-        Assert.assertNotNull(retrievedWebResourceEnhanced);
-        Assert.assertTrue(webResourceEnhanced.getId().compareTo(retrievedWebResourceEnhanced.getId()) == 0);
-        Assert.assertTrue(webResourceEnhanced.getTitolo().equals(retrievedWebResourceEnhanced.getTitolo()));
-        Assert.assertEqualsNoOrder(
+        assertNotNull(retrievedWebResourceEnhanced);
+        assertTrue(webResourceEnhanced.getId().compareTo(retrievedWebResourceEnhanced.getId()) == 0);
+        assertTrue(webResourceEnhanced.getTitolo().equals(retrievedWebResourceEnhanced.getTitolo()));
+        assertEqualsNoOrder(
                 webResourceEnhanced.getTopics().toArray(),
                 retrievedWebResourceEnhanced.getTopics().toArray()
         );
@@ -395,7 +397,7 @@ public class TypedRDFizerTestCase {
                 SourceRssEnhanced.class
         );
 
-        Assert.assertNotNull(retrievedObject);
+        assertNotNull(retrievedObject);
         logger.debug("sourceRssEnhanced: " + retrievedObject);
     }
 
@@ -439,9 +441,9 @@ public class TypedRDFizerTestCase {
                 new URIImpl(getIdentifierURI(ProjectProfile.class).toString() + "/" + projectProfile.getId()),
                 ProjectProfile.class);
 
-        Assert.assertNotNull(retrievedObject);
-        Assert.assertEquals(retrievedObject.getProjectInvolvements().get(0), projectInvolvement1);
-        Assert.assertEquals(statements.size(), 7);
+        assertNotNull(retrievedObject);
+        assertEquals(retrievedObject.getProjectInvolvements().get(0), projectInvolvement1);
+        assertEquals(statements.size(), 7);
     }
 
     private UserProfile getUserProfile(int i) throws URISyntaxException {
