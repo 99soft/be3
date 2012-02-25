@@ -28,6 +28,11 @@ package org.nnsoft.be3;
  */
 public class RDFizerException extends Exception {
 
+    /**
+     *
+     */
+    private static final long serialVersionUID = 1L;
+
     public RDFizerException(String message) {
         super(message);
     }
