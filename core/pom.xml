@@ -129,6 +129,35 @@ THE SOFTWARE.
     </dependency>
   </dependencies>
 
+  <repositories>
+    <repository>
+      <id>sunsite-repo</id>
+      <url>http://mirrors.sunsite.dk/maven2/</url>
+    </repository>
+    <repository>
+      <id>jasigorg-repo</id>
+      <url>http://developer.jasig.org/repo/content/groups/m2-legacy/</url>
+    </repository>
+    <repository>
+      <id>jboss-public-repository-group</id>
+      <url>https://repository.jboss.org/nexus/content/groups/public-jboss/</url>
+    </repository>
+    <repository>
+      <id>java-net</id>
+      <url>http://download.java.net/maven/2/</url>
+    </repository>
+    <repository>
+      <id>apache-snapshots</id>
+      <url>http://repository.apache.org/snapshots/</url>
+    </repository>
+    <repository>
+      <id>aduna-software-release-repo</id>
+      <name>Aduna SW Release Repository</name>
+      <url>http://repo.aduna-software.org/maven2/releases</url>
+      <layout>default</layout>
+    </repository>
+  </repositories>
+
   <build>
     <resources>
       <resource>
@@ -140,6 +169,44 @@ THE SOFTWARE.
         </includes>
       </resource>
     </resources>
+
+    <plugins>
+      <plugin>
+        <artifactId>maven-clean-plugin</artifactId>
+        <version>2.4.1</version>
+        <executions>
+          <execution>
+            <id>auto-clean</id>
+            <phase>initialize</phase>
+            <goals>
+              <goal>clean</goal>
+            </goals>
+          </execution>
+        </executions>
+        <configuration>
+          <filesets>
+            <fileset>
+              <directory>${basedir}/</directory>
+              <includes>
+                <include>**/logs/*.log</include>
+              </includes>
+            </fileset>
+          </filesets>
+        </configuration>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-surefire-plugin</artifactId>
+        <version>2.4.3</version>
+        <configuration>
+          <includes>
+            <include>**/*TestCase.java</include>
+            <include>**/*Test.java</include>
+          </includes>
+          <enableAssertions>false</enableAssertions>
+        </configuration>
+      </plugin>
+    </plugins>
   </build>
 
 </project>
