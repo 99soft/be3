@@ -43,10 +43,4 @@ public abstract class TypedBe3 implements Be3 {
         this.typeHandlerRegistry = typeHandlerRegistry;
     }
 
-    abstract public void serialize(Object object, OutputStream outputStream, Format format)
-            throws RDFizerException;
-
-    abstract public Object getObject(List<Statement> statements, URI identifier, Class clazz)
-        throws RDFizerException;
-
 }
