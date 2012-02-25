@@ -21,6 +21,7 @@
  */
 package org.nnsoft.be3;
 
+import static java.lang.String.format;
 import org.nnsoft.be3.annotations.RDFClassType;
 import org.nnsoft.be3.annotations.RDFIdentifier;
 import org.nnsoft.be3.annotations.RDFProperty;
@@ -502,13 +503,13 @@ public final class DefaultTypedBe3Impl extends TypedBe3 {
             try {
                 methodValue = method.invoke(object);
             } catch (Exception e) {
-                throw new RuntimeException(String.format("Error while invoking method %s", method), e);
+                throw new RuntimeException(format("Error while invoking method %s", method), e);
             }
             identifier = new URIImpl(String.format("%s/%s", classType.toString(), methodValue));
         }
         if (identifier == null) {
             throw new IllegalArgumentException(
-                    String.format("Invalid bean, it is missing an identifier method. (%s)", RDFIdentifier.class)
+                    format("Invalid bean, it is missing an identifier method. (%s)", RDFIdentifier.class)
             );
         }
         return identifier;
