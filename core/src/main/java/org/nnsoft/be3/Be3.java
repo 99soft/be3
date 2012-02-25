@@ -42,7 +42,7 @@ public interface Be3 {
     public List<Statement> getRDFStatements(Object object)
         throws RDFizerException;
 
-    public Object getObject(List<Statement> statements, URI identifier, Class clazz)
+    public <T> T getObject(List<Statement> statements, URI identifier, Class<T> clazz)
         throws RDFizerException;
 
 }

@@ -82,7 +82,7 @@ public final class DefaultTypedBe3Impl extends TypedBe3 {
         return getStatements(object, new HashSet<Statement>());
     }
 
-    public Object getObject(List<Statement> statements, URI identifier, Class clazz)
+    public <T> T getObject(List<Statement> statements, URI identifier, Class<T> clazz)
             throws RDFizerException {
         if(clazz.equals(java.net.URI.class)) {
             try {
@@ -110,7 +110,7 @@ public final class DefaultTypedBe3Impl extends TypedBe3 {
         }
         List<Statement> firstLevelStatements = getLevelOneStatements(identifier, statements);
         // instantiate the object
-        Object object;
+        T object;
         try {
             object = clazz.newInstance();
         } catch (InstantiationException e) {
