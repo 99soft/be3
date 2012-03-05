@@ -23,16 +23,7 @@ package org.nnsoft.be3;
 
 import static org.testng.Assert.*;
 
-import com.collective.model.ProjectInvolvement;
-import com.collective.model.persistence.SourceRss;
-import com.collective.model.persistence.WebResource;
-import com.collective.model.persistence.enhanced.SourceRssEnhanced;
-import com.collective.model.persistence.enhanced.WebResourceEnhanced;
-import com.collective.model.profile.ProjectProfile;
-import com.collective.model.profile.UserProfile;
 import org.nnsoft.be3.annotations.RDFClassType;
-import org.apache.log4j.Logger;
-import org.joda.time.DateTime;
 import org.nnsoft.be3.model.Person;
 import org.nnsoft.be3.model.hierarchy.EnhancedResource;
 import org.nnsoft.be3.model.nested.Author;
@@ -44,11 +35,8 @@ import org.openrdf.model.Statement;
 import org.openrdf.model.URI;
 import org.openrdf.model.impl.URIImpl;
 import org.openrdf.model.vocabulary.XMLSchema;
-import org.openrdf.query.*;
 import org.openrdf.repository.Repository;
-import org.openrdf.repository.RepositoryConnection;
 import org.openrdf.repository.RepositoryException;
-import org.openrdf.repository.RepositoryResult;
 import org.openrdf.repository.sail.SailRepository;
 import org.openrdf.sail.Sail;
 import org.openrdf.sail.memory.MemoryStore;
@@ -56,9 +44,7 @@ import org.testng.Assert;
 import org.testng.annotations.AfterTest;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
-import virtuoso.sesame2.driver.VirtuosoRepository;
 
-import java.net.MalformedURLException;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.text.ParseException;
@@ -75,10 +61,6 @@ public class TypedRDFizerTestCase {
     private Be3 b3;
 
     private Repository repository;
-
-    private static Logger logger = Logger.getLogger(TypedRDFizerTestCase.class);
-
-    private static final String VIRTUOSO_CONNECTION = "jdbc:virtuoso://cibionte.cybion.eu:1111";
 
     public static Person getPerson() throws URISyntaxException, ParseException {
         Person dpalmisano = new Person("Davide", "Palmisano");
@@ -144,7 +126,6 @@ public class TypedRDFizerTestCase {
         }
     }
 
-
     //TODO: this test fails for the dateTypeHandler
     @Test(enabled = false)
     public void testGetPersonObject() throws URISyntaxException, RDFizerException, ParseException {
@@ -163,141 +144,6 @@ public class TypedRDFizerTestCase {
         assertEqualsNoOrder(person.getConcepts().toArray(), retrievedPerson.getConcepts().toArray());
         assertEqualsNoOrder(person.getKnows().toArray(), retrievedPerson.getKnows().toArray());
         assertEqualsNoOrder(person.getTags().toArray(), retrievedPerson.getTags().toArray());
-
-    }
-
-    @Test
-    public void testGetProfileObject() throws URISyntaxException, RDFizerException, ParseException {
-        UserProfile profile = new UserProfile();
-        profile.setId(new Long(73662));
-        profile.addInterest(new java.net.URI("http://dbpedia.org/resource/Basketball"));
-        profile.addInterest(new java.net.URI("http://dbpedia.org/resource/Travelling"));
-        profile.addSkill(new java.net.URI("http://dbpedia.org/resource/Maven"));
-        profile.addSkill(new java.net.URI("http://dbpedia.org/resource/Java"));
-        List<Statement> statements = b3.getRDFStatements(profile);
-        UserProfile retrievedProfile = (UserProfile) b3.getObject(
-                statements,
-                new URIImpl(getIdentifierURI(UserProfile.class).toString() + "/" + profile.getId()),
-                UserProfile.class
-        );
-        assertNotNull(retrievedProfile);
-        assertEquals(profile, retrievedProfile);
-        assertEqualsNoOrder(profile.getInterests().toArray(), retrievedProfile.getInterests().toArray());
-        assertEqualsNoOrder(profile.getSkills().toArray(), retrievedProfile.getSkills().toArray());
-    }
-
-    @Test
-    public void testGetWebResourceEnhancedObject()
-            throws MalformedURLException, URISyntaxException, RDFizerException {
-        WebResourceEnhanced resource = getEnhancedWebResource();
-
-        resource.setId(new Integer(5648));
-        resource.setTitolo("Just a fake resource");
-        resource.setDescrizione("This fake web resource it's only for testing purposes");
-        resource.setUrl(new URL("http://davidepalmisano.com/fake-page.html"));
-        resource.addTopic(new java.net.URI("http://dbpedia.org/resource/Semantic_Web"));
-        resource.addTopic(new java.net.URI("http://dbpedia.org/resource/Web_of_data"));
-        resource.addTopic(new java.net.URI("http://dbpedia.org/resource/Java"));
-        List<Statement> statements = b3.getRDFStatements(resource);
-
-        WebResourceEnhanced retrievedResource = (WebResourceEnhanced) b3.getObject(
-                statements,
-                new URIImpl(getIdentifierURI(WebResourceEnhanced.class).toString() + "/" + resource.getId()),
-                WebResourceEnhanced.class
-        );
-        assertNotNull(retrievedResource);
-        assertEquals(resource, retrievedResource);
-        assertEqualsNoOrder(resource.getTopics().toArray(), retrievedResource.getTopics().toArray());
-        assertEquals(resource.getDescrizione(), retrievedResource.getDescrizione());
-        assertEquals(resource.getTitolo(), retrievedResource.getTitolo());
-        assertEquals(resource.getUrl(), retrievedResource.getUrl());
-    }
-
-    @Test
-    public void testGetProjectProfile() throws URISyntaxException, RDFizerException {
-        ProjectProfile projectProfile = new ProjectProfile();
-        projectProfile.setId(new Long(24636));
-        projectProfile.addManifestoConcept(new java.net.URI("http://dbpedia.org/resource/Example"));
-        projectProfile.addManifestoConcept(new java.net.URI("http://dbpedia.org/resource/Fake"));
-        List<Statement> statements = b3.getRDFStatements(projectProfile);
-        assertTrue(statements.size() == 3);
-        ProjectProfile retrievedProjectProfile = (ProjectProfile) b3.getObject(
-                statements,
-                new URIImpl(getIdentifierURI(ProjectProfile.class).toString() + "/" + projectProfile.getId()),
-                ProjectProfile.class
-        );
-        assertNotNull(retrievedProjectProfile);
-        assertEqualsNoOrder(
-                projectProfile.getManifestoConcepts().toArray(),
-                retrievedProjectProfile.getManifestoConcepts().toArray()
-        );
-    }
-
-    /**
-     * This test checks the behavior of the {@link DefaultTypedBe3Impl}
-     * when tries to deserialize triples with no datatypes specified.
-     */
-    // TODO make this atomic putting a test dependancy to Jena Beans
-    @Test(enabled = false)
-    public void testGetExistentUser() throws RepositoryException, RDFizerException {
-        final URI identifier =
-                new URIImpl("http://xmlns.com/foaf/0.1/Person/00000000-0000-0001-0000-000000000005");
-        Repository repository = new VirtuosoRepository(
-                VIRTUOSO_CONNECTION,
-                "dba",
-                "cybiondba"
-        );
-        repository.initialize();
-        // getting a profile that we presume it's already there
-        RepositoryConnection repositoryConnection = repository.getConnection();
-        RepositoryResult reposititoryResult = repositoryConnection.getStatements(
-                identifier,
-                null,
-                null,
-                false
-        );
-        List<Statement> statements = reposititoryResult.asList();
-        UserProfile expected = (UserProfile) b3.getObject(statements, identifier, UserProfile.class);
-        assertNotNull(expected);
-    }
-
-    @Test
-    public void shouldDeserializeExistingWebResourceEnhanced()
-            throws RepositoryException, RDFizerException, QueryEvaluationException, MalformedQueryException {
-        final URI identifier =
-                new URIImpl("http://collective.com/resources/web/28815");
-        Repository repository = new VirtuosoRepository(
-                VIRTUOSO_CONNECTION,
-                "dba",
-                "cybiondba"
-        );
-        repository.initialize();
-        RepositoryConnection repositoryConnection = repository.getConnection();
-        String queryString = "CONSTRUCT\n" +
-                "{\n" +
-                "<" + identifier.toString() + "> ?p ?o.\n" +
-                "?q ?r ?t.\n" +
-                "}\n" +
-                "FROM <http://collective.com/resources/web/alternative>\n" +
-                "\n" +
-                "WHERE {\n" +
-                "<" + identifier.toString() + "> ?p ?o.\n" +
-                "<" + identifier.toString() + "> <http://collective.com/resources/web/hasSourceRSS> ?q.\n" +
-                "?q ?r ?t.\n" +
-                "}";
-        GraphQuery graphQuery = repositoryConnection.prepareGraphQuery(QueryLanguage.SPARQL, queryString);
-        GraphQueryResult result = graphQuery.evaluate();
-        logger.debug("stop here");
-        List<Statement> stmts = new ArrayList<Statement>();
-        while (result.hasNext()) {
-            stmts.add(result.next());
-        }
-        WebResourceEnhanced webResourceEnhanced = (WebResourceEnhanced)
-                b3.getObject(stmts, identifier, WebResourceEnhanced.class);
-        logger.debug(webResourceEnhanced);
-
-        result.close();
-        repositoryConnection.close();
     }
 
     @Test
@@ -307,7 +153,7 @@ public class TypedRDFizerTestCase {
         Comparator<Statement> statementComparator = new StatementComparator();
         Collections.sort(statements, statementComparator);
 
-        Book retrievedBook = (Book) b3.getObject(
+        Book retrievedBook = b3.getObject(
                 statements,
                 new URIImpl(getIdentifierURI(Book.class).toString() + "/" + book.getId()),
                 Book.class
@@ -356,111 +202,6 @@ public class TypedRDFizerTestCase {
         );
     }
 
-    //already existed
-    @Test(enabled = true)
-    public void shouldSerializeWebResourceEnhanced() throws MalformedURLException, RDFizerException {
-
-        WebResourceEnhanced webResourceEnhanced = getEnhancedWebResource();
-
-        List<Statement> statements = b3.getRDFStatements(webResourceEnhanced);
-
-        for (Statement st : statements) {
-            logger.debug("statement: " + st);
-        }
-
-        assertTrue(statements.size() == 9);
-
-        WebResourceEnhanced retrievedWebResourceEnhanced = (WebResourceEnhanced) b3.getObject(
-                statements,
-                new URIImpl(getIdentifierURI(WebResourceEnhanced.class).toString() + "/" + webResourceEnhanced.getId()),
-                WebResourceEnhanced.class
-        );
-        assertNotNull(retrievedWebResourceEnhanced);
-        assertTrue(webResourceEnhanced.getId().compareTo(retrievedWebResourceEnhanced.getId()) == 0);
-        assertTrue(webResourceEnhanced.getTitolo().equals(retrievedWebResourceEnhanced.getTitolo()));
-        assertEqualsNoOrder(
-                webResourceEnhanced.getTopics().toArray(),
-                retrievedWebResourceEnhanced.getTopics().toArray()
-        );
-    }
-
-    @Test
-    public void shouldSerializeDeserializeSourceRssEnhanced() throws RDFizerException,
-            MalformedURLException {
-        SourceRssEnhanced sourceRssEnhanced = getSourceRssEnhanced();
-
-        List<Statement> statements = b3.getRDFStatements(sourceRssEnhanced);
-
-        SourceRssEnhanced retrievedObject = (SourceRssEnhanced) b3.getObject(
-                statements,
-                new URIImpl(getIdentifierURI(SourceRssEnhanced.class).toString() + "/" + sourceRssEnhanced.getId()),
-                SourceRssEnhanced.class
-        );
-
-        assertNotNull(retrievedObject);
-        logger.debug("sourceRssEnhanced: " + retrievedObject);
-    }
-
-    @Test
-    public void shouldSerializeProjectInvolvement() throws URISyntaxException, RDFizerException {
-
-        //project profile
-        ProjectProfile projectProfile = new ProjectProfile();
-        projectProfile.setId(new Long(99));
-        List<java.net.URI> manifestoConcepts = new ArrayList<java.net.URI>();
-        manifestoConcepts.add(new java.net.URI("http://first.com"));
-        manifestoConcepts.add(new java.net.URI("http://second.com"));
-        projectProfile.setManifestoConcepts(manifestoConcepts);
-
-        //involvement
-        ProjectInvolvement projectInvolvement1 = new ProjectInvolvement();
-
-        projectInvolvement1.setUserProfile(new java.net.URI("http://user.profile.com/1"));
-        projectInvolvement1.setRole("fake role");
-        projectInvolvement1.setSince(new DateTime());
-        projectInvolvement1.setTo(new DateTime().plusDays(7));
-        //strategy for the id to be unique
-        String idProjectInvolvement = projectProfile.getId().toString()
-                .concat(String.valueOf(projectInvolvement1.getRole().hashCode()));
-
-        projectInvolvement1.setId(Long.parseLong(idProjectInvolvement));
-
-        List<ProjectInvolvement> projectInvolvements = new ArrayList<ProjectInvolvement>();
-        projectInvolvements.add(projectInvolvement1);
-        //to test, comment it out and see that rdfizer serializes correctly the partial object
-        //set project involvements
-        projectProfile.setProjectInvolvements(projectInvolvements);
-
-        List<Statement> statements = b3.getRDFStatements(projectProfile);
-        for (Statement s : statements) {
-            logger.debug("stmt: " + s.toString());
-        }
-
-        ProjectProfile retrievedObject = (ProjectProfile) b3.getObject(
-                statements,
-                new URIImpl(getIdentifierURI(ProjectProfile.class).toString() + "/" + projectProfile.getId()),
-                ProjectProfile.class);
-
-        assertNotNull(retrievedObject);
-        assertEquals(retrievedObject.getProjectInvolvements().get(0), projectInvolvement1);
-        assertEquals(statements.size(), 7);
-    }
-
-    private UserProfile getUserProfile(int i) throws URISyntaxException {
-        UserProfile userProfile = new UserProfile();
-        userProfile.setId(new Long(i));
-        return userProfile;
-    }
-
-    private SourceRssEnhanced getSourceRssEnhanced() throws MalformedURLException {
-        SourceRssEnhanced sourceRssEnhanced = new SourceRssEnhanced();
-        sourceRssEnhanced.setId(1);
-        sourceRssEnhanced.setCategoria("categoria");
-        sourceRssEnhanced.setUrl(new URL("http://fakeurl.com"));
-        return sourceRssEnhanced;
-    }
-
-
     private EnhancedResource getEnhancedResource() {
         EnhancedResource enhancedResource = new EnhancedResource();
         enhancedResource.setId(new Long(1));
@@ -506,29 +247,5 @@ public class TypedRDFizerTestCase {
         return book;
     }
 
-    private WebResourceEnhanced getEnhancedWebResource() throws MalformedURLException {
-        WebResource webResource = new WebResource();
-        webResource.setId(new Integer(4));
-        webResource.setTitolo("fake title");
-        webResource.setDescrizione("fake description");
-        webResource.setUrl(new URL("http://www.fakeurl.com"));
-
-
-        SourceRss sourceRss = new SourceRss();
-        sourceRss.setId(new Integer(1));
-        sourceRss.setCategoria("fake category");
-        sourceRss.setUrl(new URL("http://fakeurlsourcerss.com"));
-
-        webResource.setSourceRss(sourceRss);
-
-        List<java.net.URI> concepts = new ArrayList<java.net.URI>();
-        try {
-            concepts.add(new java.net.URI("http://first.com"));
-        } catch (URISyntaxException e) {
-            //should never happen
-        }
-        WebResourceEnhanced enh = new WebResourceEnhanced(webResource, concepts);
-        return enh;
-    }
 
 }

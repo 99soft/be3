@@ -22,6 +22,7 @@
 package org.nnsoft.be3;
 
 import static java.lang.String.format;
+
 import org.nnsoft.be3.annotations.RDFClassType;
 import org.nnsoft.be3.annotations.RDFIdentifier;
 import org.nnsoft.be3.annotations.RDFProperty;
