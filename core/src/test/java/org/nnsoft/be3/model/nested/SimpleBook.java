@@ -39,6 +39,8 @@ public class SimpleBook {
     private Author mainAuthor;
     private List<Author> authors = new ArrayList<Author>();
 
+    public SimpleBook() {}
+
     @RDFIdentifier
     public int getId() {
         return this.id;
@@ -72,5 +74,38 @@ public class SimpleBook {
 
     public void addAuthor(Author author) {
         this.authors.add(author);
+    }
+
+    public static class SimpleBookBuilder {
+
+        private SimpleBook bookToBuild = new SimpleBook();
+
+        public static SimpleBookBuilder simpleBook() {
+            return new SimpleBookBuilder();
+        }
+
+        public SimpleBookBuilder withId(int id) {
+            bookToBuild.setId(id);
+            return this;
+        }
+
+        public SimpleBookBuilder withMainAuthor(Author author) {
+            bookToBuild.setMainAuthor(author);
+            return this;
+        }
+
+        public SimpleBookBuilder addAuthor(Author author) {
+            bookToBuild.addAuthor(author);
+            return this;
+        }
+
+        public SimpleBook build() {
+            validate();
+            return bookToBuild;
+        }
+
+        private void validate() {
+            //do some validations
+        }
     }
 }
