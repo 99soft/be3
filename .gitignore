@@ -39,4 +39,4 @@ Icon?
 Thumbs.db
 
 # reports #
-surefire-reports/*
+*/target/*
