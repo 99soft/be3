@@ -38,5 +38,7 @@ ehthumbs.db
 Icon?
 Thumbs.db
 
-# reports #
-*/target/*
+# target folders are ignored #
+######################
+annotations/target/*
+core/target/*
