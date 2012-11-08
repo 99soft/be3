@@ -29,7 +29,6 @@ import org.nnsoft.be3.annotations.RDFClassType;
 import org.nnsoft.be3.model.Person;
 import org.nnsoft.be3.model.hierarchy.EnhancedResource;
 import org.nnsoft.be3.model.nested.Book;
-import org.nnsoft.be3.model.nested.Page;
 import org.nnsoft.be3.model.nested.SimpleBook;
 import static org.nnsoft.be3.model.nested.SimpleBook.SimpleBookBuilder.simpleBook;
 import static org.nnsoft.be3.model.nested.Book.BookBuilder.book;
