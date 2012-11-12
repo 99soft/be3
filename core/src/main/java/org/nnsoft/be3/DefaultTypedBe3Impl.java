@@ -465,8 +465,10 @@ public final class DefaultTypedBe3Impl extends TypedBe3 {
 
     private void addStatement(URI s, URI p, Object object, HashSet<Statement> added)
             throws TypeHandlerRegistryException {
-        Statement statement = typeHandlerRegistry.getStatement(s, p, object);
-        added.add(statement);
+        if (object != null) {
+            Statement statement = typeHandlerRegistry.getStatement(s, p, object);
+            added.add(statement);
+        }
     }
 
     private URI getRDFType(Class beanClass) {
