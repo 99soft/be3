@@ -75,7 +75,8 @@ THE SOFTWARE.
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-api</artifactId>
-            <version>1.6.1</version>
+            <!-- version matches aduna slf4j dependency -->
+            <version>1.5.10</version>
         </dependency>
         <dependency>
             <groupId>log4j</groupId>
