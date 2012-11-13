@@ -41,6 +41,16 @@ THE SOFTWARE.
         <log4j.version>1.2.15</log4j.version>
     </properties>
 
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>org.slf4j</groupId>
+                <artifactId>slf4j-api</artifactId>
+                <version>1.6.1</version>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
     <dependencies>
         <dependency>
             <groupId>org.99soft.be3</groupId>
@@ -75,8 +85,7 @@ THE SOFTWARE.
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-api</artifactId>
-            <!-- version matches aduna slf4j dependency -->
-            <version>1.5.10</version>
+            <!--<version>1.6.1</version>-->
         </dependency>
         <dependency>
             <groupId>log4j</groupId>
