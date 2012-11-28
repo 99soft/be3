@@ -101,4 +101,37 @@ public class Book {
         result = 31 * result + (author != null ? author.hashCode() : 0);
         return result;
     }
+
+    public static class BookBuilder {
+
+        private Book book = new Book();
+
+        public static BookBuilder book() {
+            return new BookBuilder();
+        }
+
+        public BookBuilder withId(Long aLong) {
+            book.setId(aLong);
+            return this;
+        }
+
+        public Book build() {
+            validate();
+            return book;
+        }
+
+        public BookBuilder withTitle(String s) {
+            book.setTitle(s);
+            return this;
+        }
+
+        private void validate() {
+            //
+        }
+
+        public BookBuilder havingPage(Page page) {
+            book.addPage(page);
+            return this;
+        }
+    }
 }

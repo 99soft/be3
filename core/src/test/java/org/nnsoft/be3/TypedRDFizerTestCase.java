@@ -21,15 +21,18 @@
  */
 package org.nnsoft.be3;
 
+import static org.nnsoft.be3.model.nested.Author.AuthorBuilder.author;
+import static org.nnsoft.be3.model.nested.Page.PageBuilder.page;
 import static org.testng.Assert.*;
 
 import org.nnsoft.be3.annotations.RDFClassType;
 import org.nnsoft.be3.model.Person;
 import org.nnsoft.be3.model.hierarchy.EnhancedResource;
-import org.nnsoft.be3.model.nested.Author;
 import org.nnsoft.be3.model.nested.Book;
 import org.nnsoft.be3.model.nested.Page;
 import org.nnsoft.be3.model.nested.SimpleBook;
+import static org.nnsoft.be3.model.nested.SimpleBook.SimpleBookBuilder.simpleBook;
+import static org.nnsoft.be3.model.nested.Book.BookBuilder.book;
 import org.nnsoft.be3.typehandler.*;
 import org.openrdf.model.Statement;
 import org.openrdf.model.URI;
@@ -177,7 +180,7 @@ public class TypedRDFizerTestCase {
 //            logger.debug("simpleBook statement: " + st);
 //        }
 
-        assertEquals(statements.size(), 7);
+        assertEquals(statements.size(), 9);
         //TODO: test more things?
     }
 
@@ -202,6 +205,27 @@ public class TypedRDFizerTestCase {
         );
     }
 
+    @Test
+    public void shouldSerializeObjectSkippingNullFields() throws RDFizerException {
+        Long pageId = 45L;
+        Page pageWithNullContent = Page.PageBuilder.page()
+                .withNumber(pageId)
+                .havingContent(null)
+                .build();
+        assertNull(pageWithNullContent.getContent());
+        b3.serialize(pageWithNullContent, System.out, Format.RDFXML);
+        List<Statement> statements = b3.getRDFStatements(pageWithNullContent);
+
+        Page retrievedPageWithNullField = (Page) b3.getObject(
+                statements,
+                new URIImpl(getIdentifierURI(Page.class).toString() + "/" + pageWithNullContent.getNumber()),
+                Page.class
+        );
+
+        assertNull(retrievedPageWithNullField.getContent());
+        assertEquals(retrievedPageWithNullField.getNumber(), pageId);
+    }
+
     private EnhancedResource getEnhancedResource() {
         EnhancedResource enhancedResource = new EnhancedResource();
         enhancedResource.setId(new Long(1));
@@ -218,34 +242,32 @@ public class TypedRDFizerTestCase {
     }
 
     public SimpleBook getSimpleBook() {
-        SimpleBook simpleBook = new SimpleBook(1);
-        Author author = new Author(2);
-        Author author3 = new Author(3);
-        Author author4 = new Author(4);
-
-        simpleBook.setMainAuthor(author);
-        simpleBook.addAuthor(author3);
-        simpleBook.addAuthor(author4);
+        SimpleBook simpleBook = simpleBook()
+                .withId(1)
+                .withMainAuthor(author().withId(1).build())
+                .addAuthor(author().withId(2).build())
+                .addAuthor(author().withId(3).build())
+                .addAuthor(author().withId(4).build())
+                .build();
         return simpleBook;
     }
 
     public Book getBook() {
-        Page first = new Page();
-        first.setNumber(new Long(1));
-        first.setContent("first page content");
 
-        Page second = new Page();
-        second.setNumber(new Long(2));
-        second.setContent("second page content");
-
-        Book book = new Book();
-        book.setId(new Long(1));
-        book.setTitle("book title");
-        book.addPage(first);
-        book.addPage(second);
+        Book book = book()
+                .withId(new Long(1))
+                .withTitle("book title")
+                .havingPage(page()
+                        .withNumber(new Long(1))
+                        .havingContent("first page content")
+                        .build())
+                .havingPage(page()
+                        .withNumber(new Long(2))
+                        .havingContent("second page content")
+                        .build())
+                .build();
 
         return book;
     }
-
 
 }

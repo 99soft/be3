@@ -77,4 +77,33 @@ public class Page {
         result = 31 * result + (content != null ? content.hashCode() : 0);
         return result;
     }
+
+    public static class PageBuilder {
+
+        private Page page = new Page();
+
+        public static PageBuilder page() {
+            return new PageBuilder();
+        }
+
+        public PageBuilder withNumber(Long pageNumber) {
+            page.setNumber(pageNumber);
+            return this;
+        }
+
+        public PageBuilder havingContent(String content) {
+            page.setContent(content);
+            return this;
+        }
+
+        public Page build() {
+            validate();
+            return page;
+        }
+
+        private void validate() {
+            //
+        }
+
+    }
 }
