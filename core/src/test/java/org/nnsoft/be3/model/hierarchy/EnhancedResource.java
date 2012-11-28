@@ -37,11 +37,13 @@ public class EnhancedResource extends SimpleResource {
 
     private List<URI> topics = new ArrayList<URI>();
 
+    @Override
     @RDFIdentifier
     public Long getId() {
         return super.getId();
     }
 
+    @Override
     @RDFProperty(properties = { "http://collective.com/profile/EnhancedResource/title" })
     public String getTitle() {
         return super.getTitle();

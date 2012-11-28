@@ -32,6 +32,8 @@ public class Author {
 
     private int id;
 
+    public Author() {}
+
     @RDFIdentifier
     public int getId() {
         return this.id;
@@ -43,5 +45,28 @@ public class Author {
 
     public Author(int id) {
         this.id = id;
+    }
+
+    public static class AuthorBuilder {
+
+        private Author author = new Author();
+
+        public static AuthorBuilder author() {
+            return new AuthorBuilder();
+        }
+
+        public AuthorBuilder withId(int id) {
+            author.setId(id);
+            return this;
+        }
+
+        public Author build() {
+            validate();
+            return author;
+        }
+
+        private void validate() {
+            //validate stuff
+        }
     }
 }
