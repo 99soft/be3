@@ -1,76 +1,78 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!--
-Copyright (c) 2012 The 99 Software Foundation
+	<!--
+		Copyright (c) 2012 The 99 Software Foundation Permission is hereby
+		granted, free of charge, to any person obtaining a copy of this
+		software and associated documentation files (the "Software"), to deal
+		in the Software without restriction, including without limitation the
+		rights to use, copy, modify, merge, publish, distribute, sublicense,
+		and/or sell copies of the Software, and to permit persons to whom the
+		Software is furnished to do so, subject to the following conditions:
 
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
+		The above copyright notice and this permission notice shall be
+		included in all copies or substantial portions of the Software. THE
+		SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+		IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+		MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
+		IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY
+		CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
+		TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
+		SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+	-->
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 
-The above copyright notice and this permission notice shall be included in
-all copies or substantial portions of the Software.
+	<modelVersion>4.0.0</modelVersion>
 
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-THE SOFTWARE.
--->
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	<parent>
+		<groupId>org.99soft</groupId>
+		<artifactId>oss-parent</artifactId>
+		<version>7</version>
+	</parent>
 
-    <modelVersion>4.0.0</modelVersion>
+	<groupId>org.99soft.be3</groupId>
+	<artifactId>be3-parent</artifactId>
+	<version>1.0-SNAPSHOT</version>
+	<packaging>pom</packaging>
 
-    <parent>
-        <groupId>org.99soft</groupId>
-        <artifactId>oss-parent</artifactId>
-        <version>7</version>
-    </parent>
+	<name>Be3 :: Parent</name>
+	<inceptionYear>2011</inceptionYear>
+	<licenses>
+		<license>
+			<name>The MIT License</name>
+			<url>http://www.opensource.org/licenses/mit-license.php</url>
+		</license>
+	</licenses>
 
-    <groupId>org.99soft.be3</groupId>
-    <artifactId>be3-parent</artifactId>
-    <version>1.0-SNAPSHOT</version>
-    <packaging>pom</packaging>
+	<modules>
+		<module>annotations</module>
+		<module>core</module>
+	</modules>
 
-    <name>Be3 :: Parent</name>
-    <inceptionYear>2011</inceptionYear>
-    <licenses>
-        <license>
-            <name>The MIT License</name>
-            <url>http://www.opensource.org/licenses/mit-license.php</url>
-        </license>
-    </licenses>
-
-    <modules>
-        <module>annotations</module>
-        <module>core</module>
-    </modules>
-
-    <scm>
-        <url>http://github.com/99soft/be3</url>
-        <connection>scm:git:ssh://github.com/99soft/be3.git</connection>
-        <developerConnection>scm:git:git+ssh://git@github.com/99soft/be3.git
+	<scm>
+		<url>http://github.com/99soft/be3</url>
+		<connection>scm:git:ssh://github.com/99soft/be3.git</connection>
+		<developerConnection>scm:git:git+ssh://git@github.com/99soft/be3.git
         </developerConnection>
-    </scm>
-    <issueManagement>
-        <system>GitHub Issue Management</system>
-        <url>https://github.com/99soft/be3/issues</url>
-    </issueManagement>
-    <distributionManagement>
-        <site>
-            <id>github</id>
-            <url>gitsite:git@github.com/99soft/be3.git</url>
-        </site>
-    </distributionManagement>
+	</scm>
+	<issueManagement>
+		<system>GitHub Issue Management</system>
+		<url>https://github.com/99soft/be3/issues</url>
+	</issueManagement>
+	<distributionManagement>
+		<site>
+			<id>github</id>
+			<url>gitsite:git@github.com/99soft/be3.git</url>
+		</site>
+		<repository>
+			<id>sonatype-nexus-snapshots</id>
+			<name>Sonatype Nexus Snapshots</name>
+			<url>https://oss.sonatype.org/content/repositories/snapshots</url>
+		</repository>
+	</distributionManagement>
 
-    <properties>
-        <javac.src.version>1.6</javac.src.version>
-        <javac.target.version>1.6</javac.target.version>
-    </properties>
+	<properties>
+		<javac.src.version>1.6</javac.src.version>
+		<javac.target.version>1.6</javac.target.version>
+	</properties>
 
 </project>
