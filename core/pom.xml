@@ -39,6 +39,8 @@ THE SOFTWARE.
     <properties>
         <sesame.version>2.3.2</sesame.version>
         <log4j.version>1.2.15</log4j.version>
+        <slf4j-api.version>1.6.1</slf4j-api.version>
+        <slf4j-log4j12.version>1.6.1</slf4j-log4j12.version>
     </properties>
 
     <dependencyManagement>
@@ -46,7 +48,7 @@ THE SOFTWARE.
             <dependency>
                 <groupId>org.slf4j</groupId>
                 <artifactId>slf4j-api</artifactId>
-                <version>1.6.1</version>
+                <version>${slf4j-api.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
@@ -147,6 +149,12 @@ THE SOFTWARE.
                     <artifactId>oro</artifactId>
                 </exclusion>
             </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-log4j12</artifactId>
+            <version>${slf4j-log4j12.version}</version>
+            <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.testng</groupId>

@@ -45,4 +45,5 @@ public interface Be3 {
     public <T> T getObject(List<Statement> statements, URI identifier, Class<T> clazz)
         throws RDFizerException;
 
+    public URI getIdentifierPrefix(Class clazz) throws RDFizerException;
 }

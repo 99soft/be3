@@ -25,6 +25,7 @@ import static java.lang.String.format;
 
 import org.nnsoft.be3.annotations.RDFClassType;
 import org.nnsoft.be3.annotations.RDFIdentifier;
+import org.nnsoft.be3.annotations.RDFNamespace;
 import org.nnsoft.be3.annotations.RDFProperty;
 import org.nnsoft.be3.typehandler.TypeHandlerException;
 import org.nnsoft.be3.typehandler.TypeHandlerRegistry;
@@ -41,6 +42,8 @@ import org.openrdf.repository.Repository;
 import org.openrdf.repository.RepositoryException;
 import org.openrdf.rio.RDFHandlerException;
 import org.openrdf.rio.rdfxml.util.RDFXMLPrettyWriter;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.OutputStream;
 import java.lang.reflect.InvocationTargetException;
@@ -54,6 +57,8 @@ import java.util.*;
  * @author Davide Palmisano ( dpalmisano@gmail.com )
  */
 public final class DefaultTypedBe3Impl extends TypedBe3 {
+
+    private final Logger LOGGER = LoggerFactory.getLogger(DefaultTypedBe3Impl.class);
 
     public DefaultTypedBe3Impl(Repository repository, TypeHandlerRegistry typeHandlerRegistry) {
         super(repository, typeHandlerRegistry);
@@ -117,8 +122,8 @@ public final class DefaultTypedBe3Impl extends TypedBe3 {
         } catch (IllegalAccessException e) {
             throw new RDFizerException("Error while instantiating the empty object", e);
         }
-        // get the RDFIdentifier namespaece
-        URI identifierNamespace = getRDFType(clazz);
+        // get the RDFIdentifier namespace
+        URI identifierNamespace = getIdentifierPrefix(clazz);
         String idPart = identifier.toString().replace(identifierNamespace.toString() + "/", "");
         // set the identifier
         Method identifierSetter = getIdentifierSetterMethod(clazz);
@@ -205,6 +210,18 @@ public final class DefaultTypedBe3Impl extends TypedBe3 {
         return object;
     }
 
+    @Override
+    public URI getIdentifierPrefix(Class clazz) throws RDFizerException {
+        URI identifier = null;
+        final URI rdfNamespace = getRDFNamespace(clazz);
+        if (rdfNamespace == null) {
+            identifier = getRDFType(clazz);
+        } else {
+            identifier = rdfNamespace;
+        }
+        return new URIImpl(identifier.toString());
+    }
+
     private boolean isMappable(URI property, Class clazz) {
         List<Method> getters = getAnnotatedGetters(clazz);
         for(Method getter : getters) {
@@ -269,12 +286,10 @@ public final class DefaultTypedBe3Impl extends TypedBe3 {
                 return method;
             }
         }
-        throw new RDFizerException("");
+        throw new RDFizerException("couldnt find identifier setter for class " + clazz.toString());
     }
 
     private Method getObjectIdentifierGetter(Class clazz) throws RDFizerException {
-        // Find class identifier.
-        final URI classType = getRDFType(clazz);
         for (Method method : clazz.getMethods()) {
             RDFIdentifier rdfIdentifier = method.getAnnotation(RDFIdentifier.class);
             if (rdfIdentifier != null) {
@@ -489,11 +504,24 @@ public final class DefaultTypedBe3Impl extends TypedBe3 {
         return new URIImpl(classType);
     }
 
+    private URI getRDFNamespace(Class beanClass) {
+        URIImpl namespace = null;
+        RDFNamespace rdfNamespace = (RDFNamespace) beanClass.getAnnotation(RDFNamespace.class);
+
+        if (rdfNamespace != null) {
+            final String prefix = rdfNamespace.prefix();
+            namespace = new URIImpl(prefix);
+        }
+        return namespace;
+    }
+
+
     private URI getObjectIdentifier(Object object) throws RDFizerException {
-        // Find class identifier.
+        // build instance identifier.
         URI identifier = null;
         final Class beanClass = object.getClass();
-        final URI classType = getRDFType(beanClass);
+        final URI identifierPrefix = getIdentifierPrefix(beanClass);
+
         for (Method method : beanClass.getMethods()) {
             RDFIdentifier rdfIdentifier = method.getAnnotation(RDFIdentifier.class);
             if (rdfIdentifier == null) {
@@ -508,11 +536,11 @@ public final class DefaultTypedBe3Impl extends TypedBe3 {
             } catch (Exception e) {
                 throw new RuntimeException(format("Error while invoking method %s", method), e);
             }
-            identifier = new URIImpl(String.format("%s/%s", classType.toString(), methodValue));
+            identifier = new URIImpl(String.format("%s/%s", identifierPrefix.toString(), methodValue));
         }
         if (identifier == null) {
             throw new IllegalArgumentException(
-                    format("Invalid bean, it is missing an identifier method. (%s)", RDFIdentifier.class)
+                    format("Invalid bean, it is missing a method annotated with: (%s)", RDFIdentifier.class)
             );
         }
         return identifier;

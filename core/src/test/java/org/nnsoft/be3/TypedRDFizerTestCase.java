@@ -25,9 +25,9 @@ import static org.nnsoft.be3.model.nested.Author.AuthorBuilder.author;
 import static org.nnsoft.be3.model.nested.Page.PageBuilder.page;
 import static org.testng.Assert.*;
 
-import org.nnsoft.be3.annotations.RDFClassType;
 import org.nnsoft.be3.model.Person;
 import org.nnsoft.be3.model.hierarchy.EnhancedResource;
+import org.nnsoft.be3.model.namespace.Polarity;
 import org.nnsoft.be3.model.nested.Book;
 import org.nnsoft.be3.model.nested.Page;
 import org.nnsoft.be3.model.nested.SimpleBook;
@@ -35,7 +35,6 @@ import static org.nnsoft.be3.model.nested.SimpleBook.SimpleBookBuilder.simpleBoo
 import static org.nnsoft.be3.model.nested.Book.BookBuilder.book;
 import org.nnsoft.be3.typehandler.*;
 import org.openrdf.model.Statement;
-import org.openrdf.model.URI;
 import org.openrdf.model.impl.URIImpl;
 import org.openrdf.model.vocabulary.XMLSchema;
 import org.openrdf.repository.Repository;
@@ -43,6 +42,8 @@ import org.openrdf.repository.RepositoryException;
 import org.openrdf.repository.sail.SailRepository;
 import org.openrdf.sail.Sail;
 import org.openrdf.sail.memory.MemoryStore;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.testng.Assert;
 import org.testng.annotations.AfterTest;
 import org.testng.annotations.BeforeTest;
@@ -65,6 +66,8 @@ public class TypedRDFizerTestCase {
 
     private Repository repository;
 
+    private static final Logger LOGGER = LoggerFactory.getLogger(TypedRDFizerTestCase.class);
+
     public static Person getPerson() throws URISyntaxException, ParseException {
         Person dpalmisano = new Person("Davide", "Palmisano");
         dpalmisano.addTag("Semantic Web");
@@ -79,11 +82,6 @@ public class TypedRDFizerTestCase {
         mox601.setBirthDate(new Date());
         dpalmisano.addKnow(mox601);
         return dpalmisano;
-    }
-
-    public static URI getIdentifierURI(Class clazz) {
-        RDFClassType rdfClassType = (RDFClassType) clazz.getAnnotation(RDFClassType.class);
-        return new URIImpl(rdfClassType.type());
     }
 
     @BeforeTest
@@ -136,7 +134,7 @@ public class TypedRDFizerTestCase {
         List<Statement> statements = b3.getRDFStatements(person);
         Person retrievedPerson = (Person) b3.getObject(
                 statements,
-                new URIImpl(getIdentifierURI(Person.class).toString() + "/" + person.getId()),
+                new URIImpl(b3.getIdentifierPrefix(Person.class).toString() + "/" + person.getId()),
                 Person.class
         );
         assertNotNull(retrievedPerson);
@@ -158,7 +156,7 @@ public class TypedRDFizerTestCase {
 
         Book retrievedBook = b3.getObject(
                 statements,
-                new URIImpl(getIdentifierURI(Book.class).toString() + "/" + book.getId()),
+                new URIImpl(b3.getIdentifierPrefix(Book.class).toString() + "/" + book.getId()),
                 Book.class
         );
 
@@ -193,7 +191,7 @@ public class TypedRDFizerTestCase {
 
         EnhancedResource retrievedEnhancedResource = (EnhancedResource) b3.getObject(
                 statements,
-                new URIImpl(getIdentifierURI(EnhancedResource.class).toString() + "/" + enhancedResource.getId()),
+                new URIImpl(b3.getIdentifierPrefix(EnhancedResource.class).toString() + "/" + enhancedResource.getId()),
                 EnhancedResource.class
         );
         assertNotNull(retrievedEnhancedResource);
@@ -218,12 +216,31 @@ public class TypedRDFizerTestCase {
 
         Page retrievedPageWithNullField = (Page) b3.getObject(
                 statements,
-                new URIImpl(getIdentifierURI(Page.class).toString() + "/" + pageWithNullContent.getNumber()),
+                new URIImpl(b3.getIdentifierPrefix(Page.class).toString() + "/" + pageWithNullContent.getNumber()),
                 Page.class
         );
 
         assertNull(retrievedPageWithNullField.getContent());
         assertEquals(retrievedPageWithNullField.getNumber(), pageId);
+    }
+
+    @Test
+    public void shouldSerializeObjectWithCustomNamespace() throws RDFizerException {
+        Polarity negativePolarity = new Polarity("negative");
+        b3.serialize(negativePolarity, System.out, Format.RDFXML);
+        LOGGER.info("");
+        List<Statement> statements = b3.getRDFStatements(negativePolarity);
+
+        for (Statement stmt : statements) {
+            LOGGER.info(stmt.toString());
+        }
+
+        Polarity deserialisedPolarity = (Polarity) b3.getObject(
+                statements,
+                new URIImpl(b3.getIdentifierPrefix(Polarity.class).toString() + "/" + negativePolarity.getId()),
+                Polarity.class
+        );
+        assertEquals(deserialisedPolarity, negativePolarity);
     }
 
     private EnhancedResource getEnhancedResource() {
