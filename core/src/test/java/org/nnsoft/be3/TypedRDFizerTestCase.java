@@ -232,10 +232,11 @@ public class TypedRDFizerTestCase {
         b3.registerTypeHandler(new MyURLResourceTypeHandler(), java.net.URI.class, XMLSchema.ANYURI);
         final MyURL url = new MyURL("http://an.url.com");
         final List<Statement> statements = b3.getRDFStatements(url);
-        final MyURL retrieverUrl = b3.getObject(statements,
+        final MyURL retrievedUrl = b3.getObject(statements,
                 new URIImpl(b3.getIdentifierPrefix(MyURL.class).toString() + "/" + url.getUrl()),
                 MyURL.class);
-        assertNotNull(retrieverUrl);
+        assertNotNull(retrievedUrl);
+        assertNotNull(retrievedUrl.getUrl());
     }
     
     private EnhancedResource getEnhancedResource() {
