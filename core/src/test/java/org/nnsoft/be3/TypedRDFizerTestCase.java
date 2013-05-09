@@ -55,9 +55,7 @@ import org.openrdf.repository.RepositoryException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.testng.Assert;
-import org.testng.annotations.AfterTest;
-import org.testng.annotations.BeforeTest;
-import org.testng.annotations.Test;
+import org.testng.annotations.*;
 
 /**
  * Reference test class for {@link DefaultTypedBe3Impl}.
@@ -88,13 +86,13 @@ public class TypedRDFizerTestCase {
         return dpalmisano;
     }
     
-    @BeforeTest
+    @BeforeMethod
     public void setUp() throws RepositoryException, TypeHandlerRegistryException {
     
         b3 = new DefaultTypedBe3Impl();
     }
     
-    @AfterTest
+    @AfterMethod
     public void tearDown() {
     
         b3 = null;

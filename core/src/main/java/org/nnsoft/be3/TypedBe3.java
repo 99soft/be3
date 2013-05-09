@@ -64,7 +64,7 @@ public abstract class TypedBe3 implements Be3 {
     }
     
     public TypedBe3() {
-    
+
         this(new SailRepository(new MemoryStore()));
         initialiseRepository();
     }
