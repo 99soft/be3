@@ -21,11 +21,15 @@
  */
 package org.nnsoft.be3;
 
+import org.nnsoft.be3.typehandler.TypeHandler;
 import org.nnsoft.be3.typehandler.TypeHandlerRegistry;
+import org.nnsoft.be3.typehandler.TypeHandlerRegistryException;
+import org.openrdf.model.URI;
 import org.openrdf.repository.Repository;
 
 /**
  * @author Davide Palmisano ( dpalmisano@gmail.com )
+ * @author Matteo Moci ( matteo.moci (at) gmail.com )
  */
 public abstract class TypedBe3 implements Be3 {
 
@@ -36,6 +40,19 @@ public abstract class TypedBe3 implements Be3 {
     public TypedBe3(Repository repository, TypeHandlerRegistry typeHandlerRegistry) {
         this.repository = repository;
         this.typeHandlerRegistry = typeHandlerRegistry;
+    }
+
+    public void registerTypeHandler(final TypeHandler typeHandler, final Class clazz,
+                                    final URI datatype) throws RDFizerException {
+
+        try {
+            this.typeHandlerRegistry.registerTypeHandler(typeHandler, clazz, datatype);
+        } catch (TypeHandlerRegistryException e) {
+            throw new RDFizerException("failed registering typeHandler with params: '" +
+                                       typeHandler.getType().getName().toString() + " " +
+                                       clazz.getName().toString() +
+                                       " " + datatype.toString());
+        }
     }
 
 }

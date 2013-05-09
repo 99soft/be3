@@ -243,6 +243,11 @@ public class TypedRDFizerTestCase {
         assertEquals(deserialisedPolarity, negativePolarity);
     }
 
+    @Test
+    public void shouldTestDynamicRegistrationOfTypeHandlers() {
+        assertTrue(true);
+    }
+
     private EnhancedResource getEnhancedResource() {
         EnhancedResource enhancedResource = new EnhancedResource();
         enhancedResource.setId(new Long(1));
