@@ -22,12 +22,7 @@
 package org.nnsoft.be3;
 
 import org.nnsoft.be3.typehandler.TypeHandlerRegistry;
-import org.openrdf.model.Statement;
-import org.openrdf.model.URI;
 import org.openrdf.repository.Repository;
-
-import java.io.OutputStream;
-import java.util.List;
 
 /**
  * @author Davide Palmisano ( dpalmisano@gmail.com )
