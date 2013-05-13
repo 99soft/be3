@@ -33,7 +33,6 @@ import static org.testng.Assert.assertTrue;
 
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.net.URL;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -41,14 +40,12 @@ import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 
-import org.nnsoft.be3.model.MyURL;
 import org.nnsoft.be3.model.Person;
 import org.nnsoft.be3.model.hierarchy.EnhancedResource;
 import org.nnsoft.be3.model.namespace.Polarity;
 import org.nnsoft.be3.model.nested.Book;
 import org.nnsoft.be3.model.nested.Page;
 import org.nnsoft.be3.model.nested.SimpleBook;
-import org.nnsoft.be3.typehandler.MyURLResourceTypeHandler;
 import org.nnsoft.be3.typehandler.TypeHandlerRegistryException;
 import org.openrdf.model.Statement;
 import org.openrdf.model.impl.URIImpl;
@@ -57,7 +54,9 @@ import org.openrdf.repository.RepositoryException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.testng.Assert;
-import org.testng.annotations.*;
+import org.testng.annotations.AfterMethod;
+import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.Test;
 
 /**
  * Reference test class for {@link DefaultTypedBe3Impl}.
@@ -117,25 +116,18 @@ public class TypedRDFizerTestCase {
             System.out.println(statement);
         }
     }
-
+    
     @Test
-    public void cantRegisterProtectedClassesTypeHandlers() {
-
-        //URI and URL are "protected" classes
+    public void cantRegisterProtectedXMLSchemaTypeHandlers() {
+    
+        // URI and URL are "protected" classes
         try {
-            b3.registerTypeHandler(null, URI.class, null);
-        } catch (RDFizerException e) {
+            b3.registerTypeHandler(null, URI.class, XMLSchema.ANYURI);
+        } catch (final RDFizerException e) {
             LOGGER.info("correctly caught exception: '" + e.getMessage() + "'");
             assertNotNull(e);
         }
-
-        try {
-            b3.registerTypeHandler(null, URL.class, null);
-        } catch (RDFizerException e) {
-            LOGGER.info("correctly caught exception: '" + e.getMessage() + "'");
-            assertNotNull(e);
-        }
-
+        
     }
     
     // TODO: this test fails for the dateTypeHandler
@@ -245,7 +237,7 @@ public class TypedRDFizerTestCase {
                 Polarity.class);
         assertEquals(deserialisedPolarity, negativePolarity);
     }
-
+    
     private EnhancedResource getEnhancedResource() {
     
         final EnhancedResource enhancedResource = new EnhancedResource();

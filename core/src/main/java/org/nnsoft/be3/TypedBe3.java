@@ -64,7 +64,7 @@ public abstract class TypedBe3 implements Be3 {
     }
     
     public TypedBe3() {
-
+    
         this(new SailRepository(new MemoryStore()));
         initialiseRepository();
     }
@@ -109,27 +109,22 @@ public abstract class TypedBe3 implements Be3 {
             throw new RuntimeException("Failed to register type handlers", e);
         }
     }
-
+    
     public void registerTypeHandler(final TypeHandler typeHandler, final Class clazz,
-                                    final URI datatype) throws RDFizerException {
-
-        if (clazz.equals(java.net.URI.class)) {
+            final URI datatype) throws RDFizerException {
+    
+        if (datatype.equals(XMLSchema.ANYURI)) {
             throw new RDFizerException(
-                    "Error: cant register custom typehandler for 'protected' class: " +
-                    clazz.getCanonicalName().toString());
+                    "Error: cant register custom typehandler for 'protected' XML Schema: "
+                            + datatype.toString());
         }
-        if (clazz.equals(java.net.URL.class)) {
-            throw new RDFizerException(
-                    "Error: cant register custom typehandler for 'protected' class: " +
-                    clazz.getCanonicalName().toString());
-        }
-
+        
         try {
             this.typeHandlerRegistry.registerTypeHandler(typeHandler, clazz, datatype);
         } catch (final TypeHandlerRegistryException e) {
-            throw new RDFizerException("failed registering custom typeHandler with params: '" +
-                                       typeHandler.getType().getName().toString() + " " +
-                                       clazz.getName().toString() + " " + datatype.toString());
+            throw new RDFizerException("failed registering custom typeHandler with params: '"
+                    + typeHandler.getType().getName().toString() + " " + clazz.getName().toString()
+                    + " " + datatype.toString());
         }
     }
     
