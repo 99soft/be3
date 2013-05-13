@@ -34,11 +34,7 @@ import static org.testng.Assert.assertTrue;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.text.ParseException;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 import org.nnsoft.be3.model.Person;
 import org.nnsoft.be3.model.hierarchy.EnhancedResource;
@@ -46,6 +42,7 @@ import org.nnsoft.be3.model.namespace.Polarity;
 import org.nnsoft.be3.model.nested.Book;
 import org.nnsoft.be3.model.nested.Page;
 import org.nnsoft.be3.model.nested.SimpleBook;
+import org.nnsoft.be3.model.uris.User;
 import org.nnsoft.be3.typehandler.TypeHandlerRegistryException;
 import org.openrdf.model.Statement;
 import org.openrdf.model.impl.URIImpl;
@@ -237,7 +234,25 @@ public class TypedRDFizerTestCase {
                 Polarity.class);
         assertEquals(deserialisedPolarity, negativePolarity);
     }
-    
+
+    @Test (enabled = false)
+    public void should() throws RDFizerException {
+
+        String uuidYou = UUID.randomUUID().toString();
+        User you = new User(uuidYou, "you");
+
+        String uuidMe = UUID.randomUUID().toString();
+        User me = new User(uuidMe, "me");
+        me.setFriend(you);
+
+        final List<Statement> statements = b3.getRDFStatements(me);
+
+        final User deserialisedUser = b3.getObject(statements, new URIImpl(b3.getIdentifierPrefix(
+                User.class).toString() + "/" + me.getId()), User.class);
+
+        assertEquals(deserialisedUser, me);
+    }
+
     private EnhancedResource getEnhancedResource() {
     
         final EnhancedResource enhancedResource = new EnhancedResource();
