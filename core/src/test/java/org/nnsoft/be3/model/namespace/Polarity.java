@@ -19,8 +19,6 @@ public class Polarity {
 
     private String name;
 
-    private static final String NAMESPACE = "";
-
     public Polarity() {}
 
     public Polarity(String name) {
