@@ -24,7 +24,7 @@ package org.nnsoft.be3;
 import static java.lang.String.format;
 
 /**
- * Raised if something goes wrong within {@link com.collective.rdfizer.RDFizer}.
+ * Raised if something goes wrong within {@link org.nnsoft.be3.Be3}.
  *
  * @author Davide Palmisano ( dpalmisano@gmail.com )
  */

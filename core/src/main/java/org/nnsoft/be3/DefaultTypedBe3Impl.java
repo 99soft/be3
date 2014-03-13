@@ -63,7 +63,7 @@ import org.slf4j.LoggerFactory;
  */
 public final class DefaultTypedBe3Impl extends TypedBe3 {
     
-    private final Logger LOGGER = LoggerFactory.getLogger(DefaultTypedBe3Impl.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(DefaultTypedBe3Impl.class);
     
     public DefaultTypedBe3Impl(final Repository repository,
             final TypeHandlerRegistry typeHandlerRegistry) {
