@@ -36,7 +36,7 @@ public class IntegerValueTypeHandler implements ValueTypeHandler<Integer> {
 
     public Integer deserialize(Value resource) throws TypeHandlerException {
         try {
-        return new Integer(resource.stringValue());
+        return Integer.valueOf(resource.stringValue());
         } catch(NumberFormatException e) {
             throw new TypeHandlerException("The value: '"
                     + resource.stringValue() + "' cannot be represented with an integer");

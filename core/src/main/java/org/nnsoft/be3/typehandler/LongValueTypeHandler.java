@@ -36,7 +36,7 @@ public class LongValueTypeHandler implements ValueTypeHandler<Long> {
 
     public Long deserialize(Value resource) throws TypeHandlerException {
         try {
-        return new Long(resource.stringValue());
+        return Long.valueOf(resource.stringValue());
         } catch(NumberFormatException e) {
             throw new TypeHandlerException("The value: '"
                     + resource.stringValue() + "' cannot be represented with a long");
