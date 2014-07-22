@@ -21,21 +21,7 @@
  */
 package org.nnsoft.be3;
 
-import static org.nnsoft.be3.model.nested.Author.AuthorBuilder.author;
-import static org.nnsoft.be3.model.nested.Book.BookBuilder.book;
-import static org.nnsoft.be3.model.nested.Page.PageBuilder.page;
-import static org.nnsoft.be3.model.nested.SimpleBook.SimpleBookBuilder.simpleBook;
-import static org.testng.Assert.assertEquals;
-import static org.testng.Assert.assertEqualsNoOrder;
-import static org.testng.Assert.assertNotNull;
-import static org.testng.Assert.assertNull;
-import static org.testng.Assert.assertTrue;
-
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.text.ParseException;
-import java.util.*;
-
+import org.nnsoft.be3.model.Item;
 import org.nnsoft.be3.model.Person;
 import org.nnsoft.be3.model.hierarchy.EnhancedResource;
 import org.nnsoft.be3.model.namespace.Polarity;
@@ -54,6 +40,26 @@ import org.testng.Assert;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
+
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.text.ParseException;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.Date;
+import java.util.List;
+import java.util.UUID;
+
+import static org.nnsoft.be3.model.nested.Author.AuthorBuilder.author;
+import static org.nnsoft.be3.model.nested.Book.BookBuilder.book;
+import static org.nnsoft.be3.model.nested.Page.PageBuilder.page;
+import static org.nnsoft.be3.model.nested.SimpleBook.SimpleBookBuilder.simpleBook;
+import static org.testng.Assert.assertEquals;
+import static org.testng.Assert.assertEqualsNoOrder;
+import static org.testng.Assert.assertNotNull;
+import static org.testng.Assert.assertNull;
+import static org.testng.Assert.assertTrue;
 
 /**
  * Reference test class for {@link DefaultTypedBe3Impl}.
@@ -253,10 +259,20 @@ public class TypedRDFizerTestCase {
         assertEquals(deserialisedUser, me);
     }
 
-    private EnhancedResource getEnhancedResource() {
+    @Test
+    public void givenABeanWhenIdIsStringThenShouldWork() throws Exception {
+
+        final Item item = new Item("the-string", 67L);
+        final List<Statement> statements = b3.getRDFStatements(item);
+        assertNotNull(statements);
+        assertEquals(statements.size(), 2);
+
+    }
+
+    private static EnhancedResource getEnhancedResource() {
     
         final EnhancedResource enhancedResource = new EnhancedResource();
-        enhancedResource.setId(new Long(1));
+        enhancedResource.setId(1L);
         enhancedResource.setTitle("this is a fake title");
         final List<java.net.URI> topics = new ArrayList<java.net.URI>();
         try {
@@ -269,7 +285,7 @@ public class TypedRDFizerTestCase {
         return enhancedResource;
     }
     
-    public SimpleBook getSimpleBook() {
+    public static SimpleBook getSimpleBook() {
     
         final SimpleBook simpleBook = simpleBook().withId(1)
                 .withMainAuthor(author().withId(1).build()).addAuthor(author().withId(2).build())
@@ -278,15 +294,15 @@ public class TypedRDFizerTestCase {
         return simpleBook;
     }
     
-    public Book getBook() {
+    public static Book getBook() {
     
         final Book book = book()
-                .withId(new Long(1))
+                .withId(1L)
                 .withTitle("book title")
                 .havingPage(
-                        page().withNumber(new Long(1)).havingContent("first page content").build())
+                        page().withNumber(1L).havingContent("first page content").build())
                 .havingPage(
-                        page().withNumber(new Long(2)).havingContent("second page content").build())
+                        page().withNumber(2L).havingContent("second page content").build())
                 .build();
         
         return book;
