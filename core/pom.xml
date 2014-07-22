@@ -39,9 +39,9 @@ THE SOFTWARE.
     <properties>
         <sesame.version>2.6.10</sesame.version>
         <log4j.version>1.2.17</log4j.version>
-        <slf4j-api.version>1.6.6</slf4j-api.version>
-        <slf4j-log4j12.version>1.6.6</slf4j-log4j12.version>
-        <testng.version>6.8.7</testng.version>
+        <slf4j-api.version>1.7.7</slf4j-api.version>
+        <slf4j-log4j12.version>1.7.7</slf4j-log4j12.version>
+        <testng.version>6.8.8</testng.version>
     </properties>
 
     <dependencyManagement>
