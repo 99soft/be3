@@ -37,7 +37,7 @@ THE SOFTWARE.
     <name>Be3 :: Core</name>
 
     <properties>
-        <sesame.version>2.6.10</sesame.version>
+        <sesame.version>4.1.2</sesame.version>
         <log4j.version>1.2.17</log4j.version>
         <slf4j-api.version>1.7.7</slf4j-api.version>
         <slf4j-log4j12.version>1.7.7</slf4j-log4j12.version>
