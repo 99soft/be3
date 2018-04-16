@@ -42,3 +42,4 @@ Thumbs.db
 ######################
 annotations/target/*
 core/target/*
+.idea/*
